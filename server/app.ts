@@ -6,17 +6,17 @@ import mongoose from "mongoose"
 const app = express()
 
 // ROUTER REFERENCE
-import usersRouter from "./controllers/users"
-import loginRouter from "./controllers/login"
+import usersRouter from "./routes/user.routes"
+import loginRouter from "./routes/login.route"
+import productRouter from "./routes/product.routes"
 // const treeRouter = require('./controllers/tree')
 
 // const middleware = require('./utils/middleware')
 import logger from "./utils/logger"
-// const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
 
-logger.info('connecting to', config.MONGODB_URI)
+// logger.info('connecting to', config.MONGODB_URI)
 
 
 mongoose.connect(config.MONGODB_URI)
@@ -35,7 +35,7 @@ app.use(express.json())
 // ROUTER
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
-// app.use('/api/trees', treeRouter)
+app.use('/api/product', productRouter)
 
 // app.use(middleware.unknownEndpoint)
 // app.use(middleware.errorHandler)

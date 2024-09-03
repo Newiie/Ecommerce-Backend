@@ -1,0 +1,20 @@
+GET http://localhost:3001/api/users
+
+### POST REGISTER
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "username",
+    "name": "john doe",
+    "password": "password"
+}
+
+### POST LOGIN
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "mluukkai",
+    "password": "salainen"
+}

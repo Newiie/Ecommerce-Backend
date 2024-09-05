@@ -1,0 +1,66 @@
+
+### Get Product by ID
+GET http://localhost:3001/api/products/66d9aec76e986b72bc744da7
+Content-Type: application/json
+
+### Get All Products
+GET http://localhost:3001/api/products/
+Content-Type: application/json
+
+
+### Delete Product by ID
+DELETE http://localhost:3001/api/products/66d9acdc2fe756f08fe79e56
+Content-Type: application/json
+
+### Add a New Product
+POST http://localhost:3001/api/products
+Content-Type: application/json
+
+{
+    "name": "Sample Product",
+    "rating": 4.5,
+    "numOfReviews": 100,
+    "basePrice": 50.00,
+    "discountRate": 10,
+    "productImage": "http://example.com/product.png",
+    "variations": [
+        {
+            "variationName": "Size-Color",
+            "size": "M",
+            "color": "Blue",
+            "price": 55.00,
+            "discountRate": 5,
+            "image": "http://example.com/variation1.png"
+        }
+    ],
+    "imagesVariation": [
+        "http://example.com/variation1.png",
+        "http://example.com/variation2.png"
+    ]
+}
+
+### Update Product by ID
+PUT http://localhost:3001/api/products/66d9acdc2fe756f08fe79e56
+Content-Type: application/json
+
+{
+    "name": "Updated Product",
+    "rating": 4.8,
+    "numOfReviews": 120,
+    "basePrice": 60.00,
+    "discountRate": 15,
+    "productImage": "http://example.com/updated_product.png",
+    "variations": [
+        {
+            "variationName": "Size-Color",
+            "size": "L",
+            "color": "Red",
+            "price": 65.00,
+            "discountRate": 10,
+            "image": "http://example.com/updated_variation.png"
+        }
+    ],
+    "imagesVariation": [
+        "http://example.com/updated_variation.png"
+    ]
+}

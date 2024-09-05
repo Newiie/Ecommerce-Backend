@@ -1,10 +1,16 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/auth.service';
 class LoginController {
-    public async login(req: Request, res: Response) {
+
+    public authService: AuthService;
+    constructor() {
+        this.authService = new AuthService;
+    }
+
+    public login = async (req: Request, res: Response) => {
         const { username, password } = req.body;
 
-        const result = await AuthService.authenticateUser(username, password);
+        const result = await this.authService.authenticateUser(username, password);
 
         if (result.error) {
             return res.status(401).json({ error: result.error });

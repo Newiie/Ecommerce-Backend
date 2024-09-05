@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from "../models/user.model";
-import UserRepository from '../repositories/user.repository';
-
+import mongoDbUserRepository from '../repositories/User/mongodb.user.repository';
+import { IUserRepository } from '../repositories/User/user.repository.interface';
 interface AuthResult {
   error?: string;
   token?: string;
@@ -11,8 +11,12 @@ interface AuthResult {
 }
 
 class AuthService {
+  private userRepository: IUserRepository;
+  constructor() {
+    this.userRepository = new mongoDbUserRepository;
+  }
   public async authenticateUser(username: string, password: string) : Promise<AuthResult> {
-      const user = await UserRepository.findByUsername(username);
+      const user = await this.userRepository.findByUsername(username);
       if (!user) {
         return { error: 'Invalid username or password' };
       }
@@ -44,4 +48,4 @@ class AuthService {
   }
 }
 
-export default new AuthService();
+export default AuthService;

@@ -13,7 +13,7 @@ import productRouter from "./routes/product.routes"
 
 // const middleware = require('./utils/middleware')
 import logger from "./utils/logger"
-
+import middleware from "./utils/middleware"
 mongoose.set('strictQuery', false)
 
 // logger.info('connecting to', config.MONGODB_URI)
@@ -35,9 +35,9 @@ app.use(express.json())
 // ROUTER
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
-app.use('/api/product', productRouter)
+app.use('/api/products', productRouter)
 
 // app.use(middleware.unknownEndpoint)
-// app.use(middleware.errorHandler)
+app.use(middleware.errorHandler)
 
 export default app

@@ -1,28 +1,56 @@
+import { IProductRepository } from '../repositories/Product/product.repository';
+import AppError from '../utils/AppError';
 import Product from '../models/product.model';
-
+import { Request, Response, NextFunction } from 'express';
 class ProductService {
-    // Method to get a product by ID
+    private productRepository: IProductRepository;
+
+    constructor(productRepository: IProductRepository) {
+        this.productRepository = productRepository;
+    }
+
     public async getProductById(id: string) {
-        return await Product.findById(id);
+        const product = await this.productRepository.findById(id);
+        if (!product) {
+            throw new AppError(`Product with ID ${id} not found.`, 404);
+        }
+
+        return product;
     }
 
-    // Method to create a new product
+    public async getAllProduct() {
+        try {
+            const product = await this.productRepository.getAllProduct();
+            return product;
+        } catch (error) {
+            throw error
+        }
+
+    }
+
     public async createProduct(productData: any) {
-        const product = new Product(productData);
-        return await product.save();
+        return await this.productRepository.save(productData);
     }
 
-    // Method to update a product
     public async updateProduct(id: string, productData: any) {
-        return await Product.findByIdAndUpdate(id, productData, { new: true });
+        const updatedProduct = await this.productRepository.update(id, productData);
+
+        if (!updatedProduct) {
+            throw new AppError(`Product with ID ${id} not found.`, 404);
+        }
+
+        return updatedProduct;
     }
 
-    // Method to delete a product
-    public async deleteProduct(id: string) {
-        return await Product.findByIdAndDelete(id);
-    }
+    public async deleteProduct(id: string)  {
+        const deletedProduct = await this.productRepository.delete(id);
 
-    // Additional business logic related to products can go here...
+        if (!deletedProduct) {
+            throw new AppError(`Product with ID ${id} not found.`, 404);
+        }
+
+        return deletedProduct;
+    }
 }
 
-export default new ProductService();
+export default ProductService;

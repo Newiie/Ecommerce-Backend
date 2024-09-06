@@ -1,9 +1,0 @@
-[build]
-  # This is the folder where your Next.js frontend is located
-  base = "client"  # if your frontend is inside a "client" folder
-  publish = "client/out" # Next.js static export directory
-  command = "npm run build && npm run export"
-
-[dev]
-  command = "npm run dev"
-  targetPort = 3000

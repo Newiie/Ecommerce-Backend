@@ -1,0 +1,60 @@
+import User, {IUser} from '../../models/user.model';
+import { IUserRepository } from './user.repository.interface';
+import mongoose from 'mongoose';
+
+class mongoDbUserRepository implements IUserRepository {
+    
+    public async findByUsername(username: string) : Promise<IUser | null> {
+        return await User.findOne({ username });
+    }
+
+    public async findById(userId: string) : Promise<IUser | null> {
+        return await User.findById(userId)
+    }
+
+    public async createUser(userData: any) : Promise<IUser | null> {
+        const user = new User(userData);
+        return await user.save();
+    }
+
+    public async findAllUsers() : Promise<IUser[] | null> {
+        return await User.find({});
+    }
+
+    public async updateUser(user: IUser): Promise<IUser | null> {
+        return await user.save();
+    }
+
+     public async addOrUpdateCart(userId: string, productId: string, quantity: number): Promise<void> {
+        const productObjectId = new mongoose.Types.ObjectId(productId);
+
+        const updateResult = await User.updateOne(
+            { _id: userId, "cart.product": productObjectId },
+            { $inc: { "cart.$.quantity": quantity } }
+        );
+
+        if (updateResult.matchedCount === 0) {
+            await User.updateOne(
+                { _id: userId },
+                { $push: { cart: { product: productObjectId, quantity } } }
+            );
+        }
+    }
+
+    public async removeFromCart(userId: string, productId: string): Promise<void> {
+        const productObjectId = new mongoose.Types.ObjectId(productId);
+        await User.updateOne(
+            { _id: userId },
+            { $pull: { cart: { product: productObjectId } } }
+        );
+    }
+
+    public async clearCart(userId: string): Promise<void> {
+        await User.updateOne(
+            { _id: userId },
+            { $set: { cart: [] } }
+        );
+    }
+}
+
+export default mongoDbUserRepository;

@@ -13,6 +13,14 @@ const orderSchema = new mongoose.Schema({
     orderedAt: { type: Date, default: Date.now },
   });
   
+  orderSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    }
+  });
   const Order = mongoose.model('Order', orderSchema);
   export default Order;
   

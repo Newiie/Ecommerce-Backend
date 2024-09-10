@@ -3,9 +3,9 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "newuser123",
+    "username": "user",
     "name": "John Doe",
-    "password": "password123"
+    "password": "password"
 }
 
 ### Get all users
@@ -18,8 +18,8 @@ POST http://localhost:3001/api/users/cart/add
 Content-Type: application/json
 
 {
-    "userId": "66d9ae776e986b72bc744d96",
-    "productId": "66d9aec76e986b72bc744da7",
+    "userId": "66e023bdcb8c331914184038",
+    "productId": "66e023c5cb8c33191418403a",
     "quantity": 2
 }
 

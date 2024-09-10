@@ -9,7 +9,13 @@ const app = express()
 import usersRouter from "./routes/user.routes"
 import loginRouter from "./routes/login.route"
 import productRouter from "./routes/product.routes"
-// const treeRouter = require('./controllers/tree')
+import orderRouter from "./routes/order.route"
+import reviewRouter from "./routes/review.route"
+
+import User from "./models/user.model";
+import Order from "./models/order.model";
+import Review from "./models/review.model";
+import Product from "./models/product.model";
 
 // const middleware = require('./utils/middleware')
 import logger from "./utils/logger"
@@ -32,10 +38,26 @@ app.use(express.static('dist'))
 app.use(express.json())
 // app.use(middleware.requestLogger)
 
+async function resetAllData() {
+  try {
+    await User.deleteMany({});
+    await Product.deleteMany({});
+    await Order.deleteMany({});
+    await Review.deleteMany({});
+    logger.info('All data has been reset.');
+  } catch (error: any) {
+    logger.error('Error resetting data:', error.message);
+  }
+}
+
+resetAllData();
+
 // ROUTER
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/products', productRouter)
+app.use('/api/orders', orderRouter)
+app.use('/api/reviews', reviewRouter)
 
 // app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

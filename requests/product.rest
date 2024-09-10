@@ -1,23 +1,9 @@
-
-### Get Product by ID
-GET http://localhost:3001/api/products/66d9aec76e986b72bc744da7
-Content-Type: application/json
-
-### Get All Products
-GET http://localhost:3001/api/products/
-Content-Type: application/json
-
-
-### Delete Product by ID
-DELETE http://localhost:3001/api/products/66d9acdc2fe756f08fe79e56
-Content-Type: application/json
-
 ### Add a New Product
 POST http://localhost:3001/api/products
 Content-Type: application/json
 
 {
-    "name": "Sample Product",
+    "name": "Sample Product 1",
     "rating": 4.5,
     "numOfReviews": 100,
     "basePrice": 50.00,
@@ -38,6 +24,20 @@ Content-Type: application/json
         "http://example.com/variation2.png"
     ]
 }
+
+### Get Product by ID
+GET http://localhost:3001/api/products/66d9aec76e986b72bc744da7
+Content-Type: application/json
+
+### Get All Products
+GET http://localhost:3001/api/products/
+Content-Type: application/json
+
+
+### Delete Product by ID
+DELETE http://localhost:3001/api/products/66d9acdc2fe756f08fe79e56
+Content-Type: application/json
+
 
 ### Update Product by ID
 PUT http://localhost:3001/api/products/66d9acdc2fe756f08fe79e56

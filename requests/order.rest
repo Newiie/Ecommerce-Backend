@@ -1,0 +1,31 @@
+### Create a new order
+POST http://localhost:3001/api/orders
+Content-Type: application/json
+
+{
+    "userId": "66df04d942336b091163a777",
+    "products": [
+        {
+            "productId": "66df04e642336b091163a779",
+            "quantity": 2
+        },
+        {
+            "productId": "66df04f142336b091163a77c",
+            "quantity": 1
+        }
+    ]
+}
+
+### Get order by ID
+GET http://localhost:3001/api/orders/66df04f642336b091163a783
+
+### Update order status
+PUT http://localhost:3001/api/orders/66df04f642336b091163a783
+Content-Type: application/json
+
+{
+    "status": "Shipped"
+}
+
+### Delete order by ID
+DELETE http://localhost:3001/api/orders/66d9ae776e986b72bc744d96

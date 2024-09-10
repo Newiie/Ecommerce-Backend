@@ -1,0 +1,29 @@
+### Create a new review
+POST http://localhost:3001/api/reviews
+Content-Type: application/json
+
+{
+    "rating": 5,
+    "comment": "Great product!",
+    "location": "New York",
+    "user": "66e0270714b03967eb020663",
+    "product": "66e0270d14b03967eb020665"
+}
+
+### Get review by ID
+GET http://localhost:3001/api/reviews/66e0271114b03967eb020668
+
+### Update review by ID
+PUT http://localhost:3001/api/reviews/66e0271114b03967eb020668
+Content-Type: application/json
+
+{
+    "rating": 4,
+    "comment": "Good product, but could be better."
+}
+
+### Delete review by ID
+DELETE http://localhost:3001/api/reviews/66df04f642336b091163a783
+
+### Get all reviews
+GET http://localhost:3001/api/reviews

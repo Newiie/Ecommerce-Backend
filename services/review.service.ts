@@ -1,6 +1,7 @@
 import { IReviewRepository } from '../repositories/Review/review.repository';
 import AppError from '../utils/AppError';
 import { IReview } from '../models/review.model';
+import logger from '../utils/logger';
 
 class ReviewService {
   private reviewRepository: IReviewRepository;
@@ -11,10 +12,10 @@ class ReviewService {
 
   public async createReview(reviewData: IReview) {
     try {
-      console.log('Creating review with data:', reviewData); // Add this line
+      logger.info('Creating review with data:', reviewData); 
       return await this.reviewRepository.createReview(reviewData);
     } catch (error) {
-      console.error('Error creating review:', error); // Add this line
+      logger.error('Error creating review:', error); 
       throw new AppError('Failed to create review.', 500);
     }
   }

@@ -10,6 +10,15 @@ export interface IUser extends Document {
   orderHistory: { product: mongoose.Schema.Types.ObjectId, quantity: number, purchasedAt: Date }[];
 }
 
+export interface ICartItem {
+  id: string,
+  productId: mongoose.Schema.Types.ObjectId,
+  name: string,
+  quantity: number,
+  price: number,
+  image: Buffer
+}
+
 const userSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true, unique: true },
   name: { type: String, required: true },

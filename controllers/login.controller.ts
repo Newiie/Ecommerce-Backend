@@ -20,6 +20,7 @@ class LoginController {
             }
     
             res.status(200).send({
+                userId: result.id,
                 token: result.token,
                 username: result.username,
                 name: result.name

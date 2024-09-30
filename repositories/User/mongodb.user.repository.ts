@@ -50,11 +50,27 @@ class mongoDbUserRepository implements IUserRepository {
     }
 
     public async clearCart(userId: string): Promise<void> {
+        const user = await User.findById(userId);
+        console.log("user", user)
+        
         await User.updateOne(
             { _id: userId },
             { $set: { cart: [] } }
         );
     }
+
+    public async checkout(userId: string): Promise<void> {
+        await User.updateOne(
+            { _id: userId },
+            { $set: { cart: [] } }
+        );
+    }
+
+    public async getCart(userId: string): Promise<any> {
+        const user = await User.findById(userId).populate('cart.product');
+        return user?.cart;
+    }
+
 }
 
 export default mongoDbUserRepository;

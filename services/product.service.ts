@@ -2,6 +2,7 @@ import { IProductRepository } from '../repositories/Product/product.repository';
 import AppError from '../utils/AppError';
 import Product from '../models/product.model';
 import { Request, Response, NextFunction } from 'express';
+
 class ProductService {
     private productRepository: IProductRepository;
 
@@ -23,9 +24,8 @@ class ProductService {
             const product = await this.productRepository.getAllProduct();
             return product;
         } catch (error) {
-            throw error
+            throw error;
         }
-
     }
 
     public async createProduct(productData: any) {
@@ -42,7 +42,7 @@ class ProductService {
         return updatedProduct;
     }
 
-    public async deleteProduct(id: string)  {
+    public async deleteProduct(id: string) {
         const deletedProduct = await this.productRepository.delete(id);
 
         if (!deletedProduct) {

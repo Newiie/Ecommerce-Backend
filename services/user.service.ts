@@ -4,6 +4,7 @@ import UserRepository from '../repositories/User/mongodb.user.repository';
 import { IUserRepository } from '../repositories/User/user.repository.interface';
 import bcrypt from 'bcrypt';
 import AppError from '../utils/AppError';
+import { ICartItem } from '../models/user.model';
 
 class UserService {
     
@@ -23,6 +24,8 @@ class UserService {
     public async getAllUsers(): Promise<IUser[] | null> {
         return await this.userRepository.findAllUsers();
     }
+
+
 
     public async addToCart(userId: string, productId: string, quantity: number): Promise<IUser | null> {
         const product = await this.productRepository.findById(productId)
@@ -44,7 +47,36 @@ class UserService {
 
     public async clearCart(userId: string): Promise<IUser | null> {
         await this.userRepository.clearCart(userId);
+        console.log("CLEAR CART ", await this.userRepository.findById(userId))
         return await this.userRepository.findById(userId);  
+    }
+
+    public async checkout(userId: string): Promise<IUser | null> {
+        await this.userRepository.checkout(userId);
+        
+        return await this.userRepository.findById(userId);  
+    }   
+
+    public async getCart(userId: string): Promise<ICartItem[]> {
+        const cartData = await this.userRepository.getCart(userId);
+        if (!cartData) {
+            throw new AppError("CartData not found", 404);
+        }
+
+        const cartItems: ICartItem[] = cartData.map((item: any) => {
+            const product = item.product;
+            const price = product.basePrice - (product.basePrice * (product.discountRate || 0) / 100);
+            return {
+                id: item._id,
+                productId: product._id,
+                name: product.name,
+                quantity: item.quantity,
+                price: price * item.quantity,
+                image: product.productImage,
+            };
+        });
+
+        return cartItems;
     }
 }
 

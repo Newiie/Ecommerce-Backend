@@ -29,20 +29,31 @@ class ProductController {
         }
     };
 
-
     public createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const product = await this.productService.createProduct(req.body);
+            const productData = req.body;
+            if (!productData.name) {
+                res.status(400).send({ message: 'Product name is required' });
+                return;
+            }
+            if (req.file) {
+                productData.productImage = req.file.buffer; // Store the binary data
+            }
+            const product = await this.productService.createProduct(productData);
             res.status(201).send(product);
         } catch (error) {
+            logger.error(error);
             next(error);
-            // res.status(400).send({ message: 'Failed to create product', error });
         }
     };
 
     public updateProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const product = await this.productService.updateProduct(req.params.id, req.body);
+            const productData = req.body;
+            if (req.file) {
+                productData.productImage = req.file.buffer; // Store the binary data
+            }
+            const product = await this.productService.updateProduct(req.params.id, productData);
             if (!product) {
                 res.status(404).send({ message: 'Product not found' });
                 return;
@@ -50,7 +61,6 @@ class ProductController {
             res.status(200).send(product);
         } catch (error) {
             next(error);
-            // res.status(400).send({ message: 'Failed to update product', error });
         }
     };
 

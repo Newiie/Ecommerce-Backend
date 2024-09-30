@@ -18,8 +18,8 @@ POST http://localhost:3001/api/users/cart/add
 Content-Type: application/json
 
 {
-    "userId": "66e023bdcb8c331914184038",
-    "productId": "66e023c5cb8c33191418403a",
+    "userId": "66ebdec5e6fb5ea87ce16f92",
+    "productId": "66ec0babc9db96a273e5da39",
     "quantity": 2
 }
 

@@ -7,4 +7,6 @@ export interface IUserRepository {
     addOrUpdateCart(userId: string, productId: string, quantity: number): Promise<void>;
     removeFromCart(userId: string, productId: string): Promise<void>;
     clearCart(userId: string): Promise<void>;
+    checkout(userId: string): Promise<void>;
+    getCart(userId: string): Promise<any>;
 }

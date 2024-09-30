@@ -6,18 +6,18 @@ interface IProductVariation {
   color?: string;         
   price: number;          
   discountRate?: number;  
-  image?: string;         
+  image?: Buffer;         
+  stock: number;          
 }
 
 interface IProduct extends Document {
   name: string;
   rating: number; 
   numOfReviews: number;
-  basePrice: number;      
-  discountRate?: number;  
-  productImage: string;
-  variations: IProductVariation[]; 
-  imagesVariation?: string[];      
+  productImage: Buffer;   
+  variations: IProductVariation[];  
+  imagesVariation?: Buffer[];       
+  defaultVariationIndex?: number;   
 }
 
 const productVariationSchema = new mongoose.Schema<IProductVariation>({
@@ -26,19 +26,20 @@ const productVariationSchema = new mongoose.Schema<IProductVariation>({
   color: { type: String },          
   price: { type: Number, required: true }, 
   discountRate: { type: Number },     
-  image: { type: String },            
+  image: { type: Buffer },            
+  stock: { type: Number, required: true, default: 0 }, 
 });
 
 const productSchema = new mongoose.Schema<IProduct>({
   name: { type: String, required: true },
   rating: { type: Number, required: true, default: 0 },
   numOfReviews: { type: Number, required: true, default: 0 },
-  basePrice: { type: Number, required: true },    
-  discountRate: { type: Number },                 
-  productImage: { type: String, required: true }, 
+  productImage: { type: Buffer, required: true }, 
   variations: [productVariationSchema],           
-  imagesVariation: [String],                      
+  imagesVariation: [Buffer],                      
+  defaultVariationIndex: { type: Number, default: 0 }, 
 });
+
 
 productSchema.set('toJSON', {
   transform: function (doc, ret, options) {

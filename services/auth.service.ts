@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import mongoDbUserRepository from '../repositories/User/mongodb.user.repository';
 import { IUserRepository } from '../repositories/User/user.repository.interface';
 interface AuthResult {
+  id?: string;
   error?: string;
   token?: string;
   username?: string;
@@ -41,6 +42,7 @@ class AuthService {
       );
     
       return { 
+        id: user._id.toString(),
         token, 
         username: user.username, 
         name: user.name 

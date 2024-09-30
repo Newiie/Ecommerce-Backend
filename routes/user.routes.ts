@@ -8,8 +8,10 @@ usersRouter.get('/', UserController.getAllUsers);
 usersRouter.put('/:id', UserController.updateUser);    
 usersRouter.delete('/:id', UserController.deleteUser); 
 
-usersRouter.post('/cart/add', UserController.addToCart);           
-usersRouter.post('/cart/remove', UserController.removeFromCart);    
+usersRouter.post('/cart/add', UserController.addToCart); 
+usersRouter.post('/cart/remove', UserController.removeFromCart);  
+// usersRouter.post('/cart/checkout', UserController.checkout);
+usersRouter.get('/cart/', UserController.getCart);
 usersRouter.post('/cart/clear', UserController.clearCart);         
 
 export default usersRouter;

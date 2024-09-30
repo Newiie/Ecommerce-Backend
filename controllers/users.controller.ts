@@ -79,7 +79,7 @@ class UserController {
     };
 
     // Add a product to the user's cart
-    public addToCart = async (req: Request, res: Response, next : NextFunction) => {
+    public addToCart = async (req: Request, res: Response, next: NextFunction) => {
         const { userId, productId, quantity } = req.body;
 
         try {
@@ -87,8 +87,7 @@ class UserController {
             res.status(200).json(updatedUser);
         } catch (error) {
             console.error('Error adding product to cart:', error);
-            next(error)
-            // res.status(500).json({ error: 'Failed to add product to cart' });
+            next(error);
         }
     };
 
@@ -101,8 +100,7 @@ class UserController {
             res.status(200).json(updatedUser);
         } catch (error) {
             console.error('Error removing product from cart:', error);
-            next(error)
-            // res.status(500).json({ error: 'Failed to remove product from cart' });
+            next(error);
         }
     };
 
@@ -116,6 +114,31 @@ class UserController {
         } catch (error) {
             console.error('Error clearing cart:', error);
             res.status(500).json({ error: 'Failed to clear cart' });
+        }
+    };
+
+    public checkout = async (req: Request, res: Response) => {
+        const { userId } = req.body;
+
+        try {
+            const updatedUser = await this.userService.checkout(userId);
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            console.error('Error checking out:', error);
+            res.status(500).json({ error: 'Failed to checkout' });
+        }
+    };
+
+    public getCart = async (req: Request, res: Response) => {
+        const { userId } = req.query;   
+        console.log("GET CART PARAMS", userId)
+            
+        try {
+            const updatedUser = await this.userService.getCart(userId as string);
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            console.error('Error getting cart:', error);    
+            res.status(500).json({ error: 'Failed to get cart' });
         }
     };
 }

@@ -3,7 +3,7 @@ POST http://localhost:3001/api/products
 Content-Type: application/json
 
 {
-    "name": "Sample Product 1",
+    "name": "SUPREME JACKET",
     "rating": 4.5,
     "numOfReviews": 100,
     "basePrice": 50.00,
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### Get Product by ID
-GET http://localhost:3001/api/products/66d9aec76e986b72bc744da7
+GET http://localhost:3001/api/products/66fa3220a8c1002962fe7448
 Content-Type: application/json
 
 ### Get All Products

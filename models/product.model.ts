@@ -6,7 +6,7 @@ interface IProductVariation {
   color?: string;         
   price: number;          
   discountRate?: number;  
-  image?: Buffer;         
+  productImage?: Buffer;         
   stock: number;          
 }
 
@@ -15,6 +15,7 @@ interface IProduct extends Document {
   rating: number; 
   numOfReviews: number;
   productImage: Buffer;   
+  basePrice: number;
   variations: IProductVariation[];  
   imagesVariation?: Buffer[];       
   defaultVariationIndex?: number;   
@@ -26,7 +27,7 @@ const productVariationSchema = new mongoose.Schema<IProductVariation>({
   color: { type: String },          
   price: { type: Number, required: true }, 
   discountRate: { type: Number },     
-  image: { type: Buffer },            
+  productImage: { type: Buffer },            
   stock: { type: Number, required: true, default: 0 }, 
 });
 
@@ -38,6 +39,7 @@ const productSchema = new mongoose.Schema<IProduct>({
   variations: [productVariationSchema],           
   imagesVariation: [Buffer],                      
   defaultVariationIndex: { type: Number, default: 0 }, 
+  basePrice: { type: Number, required: true, default: 0 },
 });
 
 

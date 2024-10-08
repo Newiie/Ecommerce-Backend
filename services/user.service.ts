@@ -62,20 +62,19 @@ class UserService {
         if (!cartData) {
             throw new AppError("CartData not found", 404);
         }
-
+        console.log("CART DATA ", cartData)
         const cartItems: ICartItem[] = cartData.map((item: any) => {
             const product = item.product;
-            const price = product.basePrice - (product.basePrice * (product.discountRate || 0) / 100);
             return {
                 id: item._id,
                 productId: product._id,
                 name: product.name,
                 quantity: item.quantity,
-                price: price * item.quantity,
-                image: product.productImage,
+                price: product.basePrice,
+                productImage: product.productImage,
             };
         });
-
+        console.log("CART ITEMS ", cartItems)
         return cartItems;
     }
 }

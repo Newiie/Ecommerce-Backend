@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 ### Get Product by ID
-GET http://localhost:3001/api/products/66fa3220a8c1002962fe7448
+GET http://localhost:3001/api/products/66ec0babc9db96a273e5da39
 Content-Type: application/json
 
 ### Get All Products

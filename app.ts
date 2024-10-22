@@ -12,7 +12,7 @@ import loginRouter from "./routes/login.route"
 import productRouter from "./routes/product.routes"
 import orderRouter from "./routes/order.route"
 import reviewRouter from "./routes/review.route"
-
+import paypalRouter from "./routes/paypal.route"
 
 import logger from "./utils/logger"
 
@@ -42,6 +42,7 @@ app.use('/api/login', loginRouter)
 app.use('/api/products', productRouter)
 app.use('/api/orders', orderRouter)
 app.use('/api/reviews', reviewRouter)
+app.use('/api/paypal', paypalRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

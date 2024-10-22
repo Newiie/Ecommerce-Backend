@@ -8,6 +8,28 @@ import Order from "../models/order.model";
 import Review from "../models/review.model";
 import Product from "../models/product.model";
 
+const client_id = process.env.PAYPAL_CLIENT_ID;
+const client_secret = process.env.PAYPAL_CLIENT_SECRET;
+const endpoint_url = 'https://api-m.sandbox.paypal.com' ;
+
+
+const get_access_token = async () => {
+    const auth = `${client_id}:${client_secret}`
+    const data = 'grant_type=client_credentials'
+    return fetch(endpoint_url + '/v1/oauth2/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${Buffer.from(auth).toString('base64')}`
+            },
+            body: data
+        })
+        .then(res => res.json())
+        .then(json => {
+            return json.access_token;
+        })
+}
+
 const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
         return res.status(err.statusCode).json({
@@ -59,5 +81,6 @@ export default {
     errorHandler,
     requestLogger,
     unknownEndpoint,
-    resetAllData
+    resetAllData,
+    get_access_token
 };

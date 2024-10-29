@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface IProductVariation {
+export interface IProductVariation {
+  variationId: string; 
   variationName: string;  
   size?: string;          
   color?: string;         
@@ -19,6 +20,7 @@ interface IProduct extends Document {
   variations: IProductVariation[];  
   imagesVariation?: Buffer[];       
   defaultVariationIndex?: number;   
+  productId?: string;
 }
 
 const productVariationSchema = new mongoose.Schema<IProductVariation>({
@@ -45,7 +47,16 @@ const productSchema = new mongoose.Schema<IProduct>({
 
 productSchema.set('toJSON', {
   transform: function (doc, ret, options) {
-    ret.id = ret._id;
+    ret.productId = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  }
+});
+
+productVariationSchema.set('toJSON', {
+  transform: function (doc, ret, options) {
+    ret.variationId = ret._id;
     delete ret._id;
     delete ret.__v;
     return ret;

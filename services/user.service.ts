@@ -5,6 +5,7 @@ import { IUserRepository } from '../repositories/User/user.repository.interface'
 import bcrypt from 'bcrypt';
 import AppError from '../utils/AppError';
 import { ICartItem } from '../models/user.model';
+import { IProductVariation } from '../models/product.model';
 
 class UserService {
     
@@ -21,14 +22,23 @@ class UserService {
         return await this.userRepository.createUser(userData);
     }
 
+    // TEST FUNCTION
     public async getAllUsers(): Promise<IUser[] | null> {
         return await this.userRepository.findAllUsers();
     }
 
-
-
     public async addToCart(userId: string, productId: string, quantity: number): Promise<IUser | null> {
         const product = await this.productRepository.findById(productId)
+        const productVariation = product?.variations.find((variation: IProductVariation) => variation.variationId.toString() === productId);
+
+        // if(!productVariation) {
+        //     throw new AppError("Product variation not found", 404);
+        // }
+
+        // if (!productVariation.stock) {
+        //     throw new AppError("Product out of stock", 404);
+        // }
+
         if (!product) {
             throw new AppError("Product not found", 404);
         }

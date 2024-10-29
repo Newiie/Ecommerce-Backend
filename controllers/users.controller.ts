@@ -81,7 +81,7 @@ class UserController {
     // Add a product to the user's cart
     public addToCart = async (req: Request, res: Response, next: NextFunction) => {
         const { userId, productId, quantity } = req.body;
-
+        console.log("ADD TO CART PARAMS: ", userId, productId, quantity);
         try {
             const updatedUser = await this.userService.addToCart(userId, productId, quantity);
             res.status(200).json(updatedUser);

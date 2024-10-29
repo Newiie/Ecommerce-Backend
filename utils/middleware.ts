@@ -10,11 +10,12 @@ import Product from "../models/product.model";
 
 const client_id = process.env.PAYPAL_CLIENT_ID;
 const client_secret = process.env.PAYPAL_CLIENT_SECRET;
-const endpoint_url = 'https://api-m.sandbox.paypal.com' ;
+const endpoint_url = 'https://api.sandbox.paypal.com' ;
 
 
 const get_access_token = async () => {
     const auth = `${client_id}:${client_secret}`
+    console.log("AUTH: ", auth);
     const data = 'grant_type=client_credentials'
     return fetch(endpoint_url + '/v1/oauth2/token', {
             method: 'POST',
@@ -26,16 +27,17 @@ const get_access_token = async () => {
         })
         .then(res => res.json())
         .then(json => {
+            console.log("JSON: ", json);
             return json.access_token;
         })
 }
 
 const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
-        return res.status(err.statusCode).json({
+        return res.status(err.status).json({
             message: err.message,
             error: {
-                statusCode: err.statusCode,
+                status: err.status,
                 isOperational: err.isOperational,
             }
         });
@@ -44,7 +46,7 @@ const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunc
     return res.status(500).json({
         message: 'Server error',
         error: {
-            statusCode: 500,
+            status: 500,
             isOperational: false,
         }
     });
@@ -58,22 +60,22 @@ const requestLogger = (request: Request, response : Response, next: NextFunction
     logger.info('Query:  ', request.query);
     logger.info('---');
     next(); 
-  };
+};
 
-  const unknownEndpoint = (request: Request, response: Response) => {
-    response.status(404).send({ error: 'unknown endpoint' });
-  };
+const unknownEndpoint = (request: Request, response: Response) => {
+response.status(404).send({ error: 'unknown endpoint' });
+};
 
 const resetAllData = async () => {
-try {
-    await User.deleteMany({});
-    await Product.deleteMany({});
-    await Order.deleteMany({});
-    await Review.deleteMany({});
-    logger.info('All data has been reset.');
-} catch (error: any) {
-    logger.error('Error resetting data:', error.message);
-}
+    try {
+        await User.deleteMany({});
+        await Product.deleteMany({});
+        await Order.deleteMany({});
+        await Review.deleteMany({});
+        logger.info('All data has been reset.');
+    } catch (error: any) {
+        logger.error('Error resetting data:', error.message);
+    }
 }
   
 

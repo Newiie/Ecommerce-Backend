@@ -14,14 +14,24 @@ class PaypalController {
 
     public createOrder = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { orderID } = req.body;
-            const order = await this.paypalService.createOrder(orderID);
+            const { userId, currency } = req.body;
+            const order = await this.paypalService.createOrder(userId, currency);
             console.log("ORDER: ", order);
             res.status(200).json(order);
         } catch (error) {
             next(error);
         }
     };
+
+    public captureOrder = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { orderID, userId } = req.body;
+            const order = await this.paypalService.captureOrder(orderID, userId);
+            res.status(200).json(order);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new PaypalController();

@@ -3,13 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from "../models/user.model";
 import mongoDbUserRepository from '../repositories/User/mongodb.user.repository';
 import { IUserRepository } from '../repositories/User/user.repository.interface';
-interface AuthResult {
-  id?: string;
-  error?: string;
-  token?: string;
-  username?: string;
-  name?: string;
-}
+import { AuthResult } from '../utils/types';
 
 class AuthService {
   private userRepository: IUserRepository;

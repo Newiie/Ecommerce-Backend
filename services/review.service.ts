@@ -1,6 +1,6 @@
 import { IReviewRepository } from '../repositories/Review/review.repository';
 import AppError from '../utils/AppError';
-import { IReview } from '../models/review.model';
+import { IReview } from '../utils/types';
 import logger from '../utils/logger';
 
 class ReviewService {

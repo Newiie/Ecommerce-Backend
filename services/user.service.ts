@@ -1,11 +1,10 @@
-import User, { IUser } from '../models/user.model';
+import User from '../models/user.model';
 import { IProductRepository } from '../repositories/Product/product.repository';
 import UserRepository from '../repositories/User/mongodb.user.repository';
 import { IUserRepository } from '../repositories/User/user.repository.interface';
 import bcrypt from 'bcrypt';
 import AppError from '../utils/AppError';
-import { ICartItem } from '../models/user.model';
-import { IProductVariation } from '../models/product.model';
+import { ICartItem, IProductVariation, IUser } from '../utils/types';
 
 class UserService {
     
@@ -63,7 +62,6 @@ class UserService {
 
     public async checkout(userId: string): Promise<IUser | null> {
         await this.userRepository.checkout(userId);
-        
         return await this.userRepository.findById(userId);  
     }   
 

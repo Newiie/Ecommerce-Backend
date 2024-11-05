@@ -1,14 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-
-export interface IReview extends Document {
-  rating: number;
-  comment: string;
-  image?: string;
-  location: string;
-  reviewedAt: Date;
-  user: mongoose.Schema.Types.ObjectId;
-  product: mongoose.Schema.Types.ObjectId; 
-}
+import { IReview } from "../utils/types";
 
 const reviewSchema = new mongoose.Schema<IReview>({
   rating: { type: Number, required: true, min: 1, max: 5 },

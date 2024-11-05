@@ -6,7 +6,7 @@ import { IUserRepository } from '../repositories/User/user.repository.interface'
 import { IOrderRepository } from '../repositories/Order/order.repository';
 import { IProductRepository } from '../repositories/Product/product.repository';
 import middleware from '../utils/middleware';
-import { IProduct, IProductVariation } from '../models/product.model';
+import { IProductVariation } from '../utils/types';
 
 const get_access_token = middleware.get_access_token;
 
@@ -15,16 +15,18 @@ const endpoint_url = 'https://api.sandbox.paypal.com';
 class PaypalService {
   private orderRepository: IOrderRepository;
   private productRepository: IProductRepository;
-  constructor(orderRepository: IOrderRepository, productRepository: IProductRepository) {
+  private userRepository: IUserRepository;
+
+  constructor(orderRepository: IOrderRepository, productRepository: IProductRepository, userRepository: IUserRepository) {
     this.orderRepository = orderRepository;
     this.productRepository = productRepository;
+    this.userRepository = userRepository;
   }
 
   public async createOrder(userId: string, currency: string) {
     try {
       const accessToken = await get_access_token();
   
-      // Fetch user and populate cart's product details
       const user = await User.findById(userId).populate('cart.product');
       if (!user) {
         throw new Error('User not found');
@@ -32,18 +34,17 @@ class PaypalService {
 
       console.log("USER CART: ", user.cart);
   
-      // Calculate totalAmount by matching each cart item to the correct product variation
+     
       const totalAmount = user.cart.reduce((acc, item : any) => {
         const product = item.product as any; 
         let finalPrice = product.basePrice; 
-  
-        // Find the matching variation if `variationId` is specified
+
         const variation = product.variations.find(
           (variation: IProductVariation) => variation.variationId.toString() === item.variationId?.toString()
         );
   
         if (variation) {
-          // If variation exists, use its price and apply discount if available
+        
           finalPrice = variation.price;
           if (variation.discountRate) {
             finalPrice = finalPrice * (1 - variation.discountRate / 100);
@@ -65,8 +66,8 @@ class PaypalService {
         purchase_units: [{
           amount: {
             currency_code: currency,
-            value: "1.00",
-            // value: totalAmount.toFixed(2),  // Format total for PayPal
+            // value: "1.00",
+            value: totalAmount.toFixed(2)  // Format total for PayPal
           }
         }]
       };
@@ -119,24 +120,40 @@ class PaypalService {
         });
 
 
-        // Check response status before consuming the JSON body
         if (!response.ok) {
             const errorResponse = await response.json();
             console.error('Error from PayPal:', errorResponse);
             throw new Error(`PayPal order capture failed: ${errorResponse.message}`);
         }
 
-        const user = await User.findById(userId); 
+        const user = await User.findById(userId).populate('cart.product');
+
         if (!user) {
             throw new Error('User not found');
         }
 
+        const totalAmount = user.cart.reduce((acc, item : any) => {
+          const product = item.product as any; 
+          return acc + product.basePrice * item.quantity;
+        }, 0);
+
+        console.log("user: ", user);   
+
+        const orderData = {
+          user: user._id,
+          products: user.cart,
+          totalAmount: totalAmount,
+          orderStatus: "Pending"
+        }
+
+        const order = await this.orderRepository.createOrder(orderData);
+
         user.cart = [];
+        user.orders.push(order._id);
+        await order.save();
         await user.save();
 
         const json = await response.json();
-        console.log('PayPal order captured:', json);
-        console.log("RESPONSE: ", json.status, response.status);
         return {status: json.status, statusCode: response.status}; 
 
     } catch (err) {

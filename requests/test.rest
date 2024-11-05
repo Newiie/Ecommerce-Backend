@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Get all users
-GET http://localhost:3001/api/users/cart?userId=66ebdec5e6fb5ea87ce16f92
+GET http://localhost:3001/api/users/
 
 
 

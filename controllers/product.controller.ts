@@ -37,7 +37,7 @@ class ProductController {
                 return;
             }
             if (req.file) {
-                productData.productImage = req.file.buffer; // Store the binary data
+                productData.productImage = req.file.buffer; 
             }
             const product = await this.productService.createProduct(productData);
             res.status(201).send(product);
@@ -51,7 +51,7 @@ class ProductController {
         try {
             const productData = req.body;
             if (req.file) {
-                productData.productImage = req.file.buffer; // Store the binary data
+                productData.productImage = req.file.buffer; 
             }
             const product = await this.productService.updateProduct(req.params.id, productData);
             if (!product) {

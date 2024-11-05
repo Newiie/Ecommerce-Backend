@@ -1,23 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-
-export interface IUser extends Document {
-  username: string;
-  name: string;
-  passwordHash: string;
-  cart: { 
-    product: mongoose.Schema.Types.ObjectId, 
-    quantity: number }[];
-  orderHistory: { product: mongoose.Schema.Types.ObjectId, quantity: number, purchasedAt: Date }[];
-}
-
-export interface ICartItem {
-  id: string,
-  productId: mongoose.Schema.Types.ObjectId,
-  name: string,
-  quantity: number,
-  price: number,
-  image: Buffer
-}
+import { IUser }  from "../utils/types";
 
 const userSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true, unique: true },
@@ -35,7 +17,9 @@ const userSchema = new mongoose.Schema<IUser>({
       quantity: { type: Number, required: true },
       purchasedAt: { type: Date, default: Date.now }
     }
-  ]
+  ], 
+  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
+  userType: { type: String, enum: ['admin', 'user'], default: 'user' }
 });
 
 userSchema.set('toJSON', {

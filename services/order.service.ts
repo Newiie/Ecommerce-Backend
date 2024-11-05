@@ -22,11 +22,11 @@ class OrderService {
         if (!product) {
           throw new AppError(`Product with ID ${item.productId} not found.`, 404);
         }
-        totalAmount += product.basePrice * item.quantity; // Use basePrice instead of price
+        totalAmount += product.basePrice * item.quantity; 
         productDetails.push({
           product: product._id,
           quantity: item.quantity,
-          price: product.basePrice, // Use basePrice instead of price
+          price: product.basePrice, 
         });
       }
 
@@ -37,13 +37,13 @@ class OrderService {
         orderStatus: 'Pending',
       };
 
-      console.log('Order Data:', orderData); // Log the order data
+      console.log('Order Data:', orderData); 
 
       const order = await this.orderRepository.createOrder(orderData);
-      console.log('Created Order:', order); // Log the created order
+      console.log('Created Order:', order); 
       return order;
     } catch (error) {
-      console.error('Error creating order:', error); // Log the error
+      console.error('Error creating order:', error); 
       throw error;
     }
   }

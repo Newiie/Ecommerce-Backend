@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Get order by ID
-GET http://localhost:3001/api/orders/66df04f642336b091163a783
+GET http://localhost:3001/api/orders/67299fa0d65c7fb6c9a369bc
 
 ### Update order status
 PUT http://localhost:3001/api/orders/66df04f642336b091163a783

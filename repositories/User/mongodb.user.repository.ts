@@ -2,7 +2,7 @@ import User, {IUser} from '../../models/user.model';
 import { IUserRepository } from './user.repository.interface';
 import mongoose from 'mongoose';
 
-class mongoDbUserRepository implements IUserRepository {
+class MongoDbUserRepository implements IUserRepository {
     
     public async findByUsername(username: string) : Promise<IUser | null> {
         return await User.findOne({ username });
@@ -73,4 +73,4 @@ class mongoDbUserRepository implements IUserRepository {
 
 }
 
-export default mongoDbUserRepository;
+export default MongoDbUserRepository;

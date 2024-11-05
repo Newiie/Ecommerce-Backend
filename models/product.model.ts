@@ -1,27 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-
-export interface IProductVariation {
-  variationId: string; 
-  variationName: string;  
-  size?: string;          
-  color?: string;         
-  price: number;          
-  discountRate?: number;  
-  productImage?: Buffer;         
-  stock: number;          
-}
-
-interface IProduct extends Document {
-  name: string;
-  rating: number; 
-  numOfReviews: number;
-  productImage: Buffer;   
-  basePrice: number;
-  variations: IProductVariation[];  
-  imagesVariation?: Buffer[];       
-  defaultVariationIndex?: number;   
-  productId?: string;
-}
+import { IProductVariation, IProduct } from "../utils/types";
 
 const productVariationSchema = new mongoose.Schema<IProductVariation>({
   variationName: { type: String, required: true },

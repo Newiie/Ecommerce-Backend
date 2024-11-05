@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import PaypalService from '../services/paypal.service';
 import { MongoDbOrderRepository } from '../repositories/Order/mongodb.order.repository';
 import { MongoDbProductRepository } from '../repositories/Product/mongodb.product.repository';
+import MongoDbUserRepository from '../repositories/User/mongodb.user.repository';
 
 class PaypalController {
     private paypalService: PaypalService;
@@ -9,7 +10,8 @@ class PaypalController {
     constructor() {
         const mongoDbOrderRepository = new MongoDbOrderRepository();
         const mongoDbProductRepository = new MongoDbProductRepository();
-        this.paypalService = new PaypalService(mongoDbOrderRepository, mongoDbProductRepository);
+        const mongoDbUserRepository = new MongoDbUserRepository();
+        this.paypalService = new PaypalService(mongoDbOrderRepository, mongoDbProductRepository, mongoDbUserRepository);
     }
 
     public createOrder = async (req: Request, res: Response, next: NextFunction) => {

@@ -14,7 +14,7 @@ class UserController {
 
     public createUser = async (req: Request, res: Response) => {
         const { username, name, password } = req.body;
-
+        
         if (!username || !password) {
             console.log('Validation failed: Username or password missing');
             return res.status(400).json({ error: 'Username and password are required' });

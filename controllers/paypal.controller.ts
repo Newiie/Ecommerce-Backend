@@ -11,13 +11,14 @@ class PaypalController {
         const mongoDbOrderRepository = new MongoDbOrderRepository();
         const mongoDbProductRepository = new MongoDbProductRepository();
         const mongoDbUserRepository = new MongoDbUserRepository();
+
         this.paypalService = new PaypalService(mongoDbOrderRepository, mongoDbProductRepository, mongoDbUserRepository);
     }
 
     public createOrder = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { userId, currency } = req.body;
-            const order = await this.paypalService.createOrder(userId, currency);
+            const { currency } = req.body;
+            const order = await this.paypalService.createOrder(req.id as string, currency);
             console.log("ORDER: ", order);
             res.status(200).json(order);
         } catch (error) {
@@ -27,8 +28,8 @@ class PaypalController {
 
     public captureOrder = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const { orderID, userId } = req.body;
-            const order = await this.paypalService.captureOrder(orderID, userId);
+            const { orderID } = req.body;
+            const order = await this.paypalService.captureOrder(orderID, req.id as string);
             res.status(200).json(order);
         } catch (error) {
             next(error);

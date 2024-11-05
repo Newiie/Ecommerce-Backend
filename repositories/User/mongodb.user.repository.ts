@@ -1,4 +1,5 @@
-import User, {IUser} from '../../models/user.model';
+import User from '../../models/user.model';
+import { IUser } from '../../utils/types';
 import { IUserRepository } from './user.repository.interface';
 import mongoose from 'mongoose';
 
@@ -14,6 +15,10 @@ class MongoDbUserRepository implements IUserRepository {
 
     public async createUser(userData: any) : Promise<IUser | null> {
         const user = new User(userData);
+        if (userData.username === 'admin@admin.com') {
+            user.role = 'admin';
+        }
+        
         return await user.save();
     }
 

@@ -25,21 +25,19 @@ class AuthService {
       }
     
       const userForToken = {
-        username: user.username,
         id: user._id,
+        role: user.role
       };
     
       const token = jwt.sign(
         userForToken,
-        process.env.SECRET!,
+        process.env.JWT_SECRET!,
         { expiresIn: 60 * 60 }
       );
     
       return { 
         id: user._id.toString(),
-        token, 
-        username: user.username, 
-        name: user.name 
+        token
       };
   }
 }

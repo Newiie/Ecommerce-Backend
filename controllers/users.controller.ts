@@ -62,6 +62,10 @@ class UserController {
     public deleteUser = async (req: Request, res: Response) => {
         const { id } = req.params;
         
+        if (req.role !== 'admin') {
+            throw new Error('Unauthorized');
+        }
+
         if (!id) {
             return res.status(400).json({ error: 'User ID is required' });
         }
@@ -80,10 +84,11 @@ class UserController {
 
     // Add a product to the user's cart
     public addToCart = async (req: Request, res: Response, next: NextFunction) => {
-        const { userId, productId, quantity } = req.body;
-        console.log("ADD TO CART PARAMS: ", userId, productId, quantity);
+        const { productId, quantity } = req.body;
+
+        console.log("ADD TO CART PARAMS: ", productId, quantity);
         try {
-            const updatedUser = await this.userService.addToCart(userId, productId, quantity);
+            const updatedUser = await this.userService.addToCart(req.id as string, productId, quantity);
             res.status(200).json(updatedUser);
         } catch (error) {
             console.error('Error adding product to cart:', error);
@@ -93,10 +98,10 @@ class UserController {
 
     // Remove a product from the user's cart
     public removeFromCart = async (req: Request, res: Response, next: NextFunction) => {
-        const { userId, productId } = req.body;
+        const { productId } = req.body;
 
         try {
-            const updatedUser = await this.userService.removeFromCart(userId, productId);
+            const updatedUser = await this.userService.removeFromCart(req.id as string, productId);
             res.status(200).json(updatedUser);
         } catch (error) {
             console.error('Error removing product from cart:', error);
@@ -106,10 +111,9 @@ class UserController {
 
     // Clear the user's cart
     public clearCart = async (req: Request, res: Response) => {
-        const { userId } = req.body;
 
         try {
-            const updatedUser = await this.userService.clearCart(userId);
+            const updatedUser = await this.userService.clearCart(req.id as string);
             res.status(200).json(updatedUser);
         } catch (error) {
             console.error('Error clearing cart:', error);
@@ -130,11 +134,8 @@ class UserController {
     };
 
     public getCart = async (req: Request, res: Response) => {
-        const { userId } = req.query;   
-        console.log("GET CART PARAMS", userId)
-            
         try {
-            const updatedUser = await this.userService.getCart(userId as string);
+            const updatedUser = await this.userService.getCart(req.id as string);
             res.status(200).json(updatedUser);
         } catch (error) {
             console.error('Error getting cart:', error);    

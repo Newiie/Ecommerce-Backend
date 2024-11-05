@@ -39,17 +39,18 @@ class PaypalService {
         const product = item.product as any; 
         let finalPrice = product.basePrice; 
 
-        const variation = product.variations.find(
-          (variation: IProductVariation) => variation.variationId.toString() === item.variationId?.toString()
-        );
+        // const variation = product.variations.find(
+        //   (variation: IProductVariation) => variation.variationId.toString() === item.variationId?.toString()
+        // );
   
-        if (variation) {
+        // if (variation) {
         
-          finalPrice = variation.price;
-          if (variation.discountRate) {
-            finalPrice = finalPrice * (1 - variation.discountRate / 100);
-          }
-        } else if (product.discountRate) {
+        //   finalPrice = variation.price;
+        //   if (variation.discountRate) {
+        //     finalPrice = finalPrice * (1 - variation.discountRate / 100);
+        //   }
+        // } else 
+        if (product.discountRate) {
           // If no specific variation and product-level discount exists, apply it
           finalPrice = finalPrice * (1 - product.discountRate / 100);
         }

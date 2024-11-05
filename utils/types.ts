@@ -1,18 +1,16 @@
 import mongoose, { Document} from "mongoose";
 
 interface IJwtToken extends Request {
-    userId: string;
+    id: string;
     token: string;
-    username: string;
-    name: string;
+    role: string;
 }
 
 interface AuthResult {
     id?: string;
     error?: string;
     token?: string;
-    username?: string;
-    name?: string;
+    role?: string;
 }
 
 interface IProductVariation {
@@ -59,7 +57,7 @@ interface IUser extends Document {
       quantity: number }[];
     orderHistory: { product: mongoose.Schema.Types.ObjectId, quantity: number, purchasedAt: Date }[];
     orders: mongoose.Schema.Types.ObjectId[];
-    userType: string;
+    role: string;
 }
 
 interface ICartItem {

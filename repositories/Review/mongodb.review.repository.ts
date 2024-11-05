@@ -1,14 +1,15 @@
-import Review, { IReview } from '../../models/review.model';
+import Review from '../../models/review.model';
+import { IReview} from '../../utils/types';
 import { IReviewRepository } from './review.repository';
 
 class MongoDbReviewRepository implements IReviewRepository {
   public async createReview(reviewData: IReview): Promise<IReview> {
     try {
-      console.log('Saving review to database:', reviewData); // Add this line
+      console.log('Saving review to database:', reviewData); 
       const review = new Review(reviewData);
       return await review.save();
     } catch (error) {
-      console.error('Error saving review to database:', error); // Add this line
+      console.error('Error saving review to database:', error); 
       throw error;
     }
   }

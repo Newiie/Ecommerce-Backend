@@ -1,0 +1,17 @@
+### Create order
+POST http://localhost:3001/api/paypal/create-order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmExZTgxZmJkZjZjOTc4ODU4ODQ3OSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzMwODE4MDY2LCJleHAiOjE3MzA4MjE2NjZ9.4ghhxmi0HiNQedCbaKstryo_zWch-TlITEhzStM2F98
+
+{
+    "currency": "USD"
+}
+
+### Capture order
+POST http://localhost:3001/api/paypal/capture-order
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmExZTgxZmJkZjZjOTc4ODU4ODQ3OSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzMwODE4MDY2LCJleHAiOjE3MzA4MjE2NjZ9.4ghhxmi0HiNQedCbaKstryo_zWch-TlITEhzStM2F98
+
+{
+    "orderID": "1234567890"
+}

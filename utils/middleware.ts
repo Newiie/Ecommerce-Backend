@@ -3,6 +3,11 @@ import AppError from './AppError';
 import logger from './logger';
 import jwt from 'jsonwebtoken';
 
+// REPOSITORIES REFERENCE
+
+import MongoDbUserRepository from '../repositories/User/mongodb.user.repository';
+const UserRepository = new MongoDbUserRepository();
+
 // MODELS REFERENCE
 import User from '../models/user.model';
 import Order from "../models/order.model";
@@ -10,25 +15,41 @@ import Review from "../models/review.model";
 import Product from "../models/product.model";
 import { IJwtToken } from './types';
 
+// ENVIRONMENT VARIABLES
 const client_id = process.env.PAYPAL_CLIENT_ID;
 const client_secret = process.env.PAYPAL_CLIENT_SECRET;
-const endpoint_url = 'https://api.sandbox.paypal.com' ;
+const endpoint_url = process.env.ENDPOINT_URL;
 
+// Extend the Request interface to include userId
+declare module 'express-serve-static-core' {
+    interface Request {
+        id?: string;
+        role?: string;
+    }
+}
+
+// MIDDLEWARE FUNCTIONS
 const jwtAuth = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
     }
-
+    
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as IJwtToken;
-        const user = await User.findById(decoded.userId);
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid token' });
+        if (decoded.role === "user") {  
+            const user = await UserRepository.findById(decoded.id);
+            if (!user) {
+                return res.status(401).json({ message: 'Invalid token' });
+            }
         }
+
+        req.id = decoded.id;
+        req.role = decoded.role;
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Invalid token' });
+        console.log("ERROR: ", error);
+        next(error);
     }
 }
 
@@ -103,5 +124,6 @@ export default {
     requestLogger,
     unknownEndpoint,
     resetAllData,
-    get_access_token
+    get_access_token,
+    jwtAuth
 };

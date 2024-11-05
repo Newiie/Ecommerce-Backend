@@ -18,6 +18,7 @@ class UserService {
     public async createUser(username: string, name: string, password: string): Promise<IUser | null> {
         const passwordHash = await bcrypt.hash(password, 10);
         const userData = { username, name, passwordHash };
+        
         return await this.userRepository.createUser(userData);
     }
 
@@ -28,7 +29,7 @@ class UserService {
 
     public async addToCart(userId: string, productId: string, quantity: number): Promise<IUser | null> {
         const product = await this.productRepository.findById(productId)
-        const productVariation = product?.variations.find((variation: IProductVariation) => variation.variationId.toString() === productId);
+        // const productVariation = product?.variations.find((variation: IProductVariation) => variation.variationId.toString() === productId);
 
         // if(!productVariation) {
         //     throw new AppError("Product variation not found", 404);

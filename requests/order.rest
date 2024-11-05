@@ -20,11 +20,12 @@ Content-Type: application/json
 GET http://localhost:3001/api/orders/67299fa0d65c7fb6c9a369bc
 
 ### Update order status
-PUT http://localhost:3001/api/orders/66df04f642336b091163a783
+PUT http://localhost:3001/api/orders/672a371873e06f6364d707a2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmExZmE1OGNhNzYwMDAzNDNmN2UzMyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczMDgxOTkxMiwiZXhwIjoxNzMwODIzNTEyfQ.iwt7EtfOm_VRn43yg7g7OFJVUHvtQsWpcD5TOsySDCw
 
 {
-    "status": "Shipped"
+    "status": "Pending"
 }
 
 ### Delete order by ID

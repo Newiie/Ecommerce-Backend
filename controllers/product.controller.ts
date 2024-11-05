@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { MongoDbProductRepository } from '../repositories/Product/mongodb.product.repository';
 import ProductService from '../services/product.service';
 import logger from '../utils/logger';
+import AppError from '../utils/AppError';
 
 class ProductController {
     private productService: ProductService;
@@ -31,6 +32,10 @@ class ProductController {
 
     public createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+            if (req.role !== 'admin') {
+                throw new Error('Unauthorized');
+            }
+
             const productData = req.body;
             if (!productData.name) {
                 res.status(400).send({ message: 'Product name is required' });
@@ -49,23 +54,33 @@ class ProductController {
 
     public updateProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+            if (req.role !== 'admin') {
+                throw new AppError("You are not authorized to update this product", 403);
+            }
+
             const productData = req.body;
             if (req.file) {
                 productData.productImage = req.file.buffer; 
             }
+
             const product = await this.productService.updateProduct(req.params.id, productData);
             if (!product) {
                 res.status(404).send({ message: 'Product not found' });
                 return;
             }
+
             res.status(200).send(product);
         } catch (error) {
             next(error);
         }
     };
 
-    public deleteProduct = async (req: Request, res: Response): Promise<void> => {
+    public deleteProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+            if (req.role !== 'admin') {
+                throw new AppError("You are not authorized to delete this product", 403);
+            }
+
             const product = await this.productService.deleteProduct(req.params.id);
             if (!product) {
                 res.status(404).send({ message: 'Product not found' });
@@ -73,7 +88,7 @@ class ProductController {
             }
             res.status(200).send({ message: 'Product deleted successfully' });
         } catch (error) {
-            res.status(500).send({ message: 'Failed to delete product', error });
+            next(error)
         }
     };
 }

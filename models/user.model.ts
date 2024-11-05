@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema<IUser>({
     }
   ], 
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
-  userType: { type: String, enum: ['admin', 'user'], default: 'user' }
+  role: { type: String, enum: ['admin', 'user'], default: 'user' }
 });
 
 userSchema.set('toJSON', {

@@ -1,6 +1,7 @@
 ### Add a New Product
 POST http://localhost:3001/api/products
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmExZmE1OGNhNzYwMDAzNDNmN2UzMyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczMDgxNDU5MywiZXhwIjoxNzMwODE4MTkzfQ.t6WkqZQPD3GYDsd4BR8xuQdIccV29YE56Hhd-aikJe8
 
 {
     "name": "SUPREME JACKET",
@@ -40,8 +41,9 @@ Content-Type: application/json
 
 
 ### Update Product by ID
-PUT http://localhost:3001/api/products/66d9acdc2fe756f08fe79e56
+PUT http://localhost:3001/api/products/672a228c8472da6e83e988ea
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmExZTgxZmJkZjZjOTc4ODU4ODQ3OSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzMwODE0NzIxLCJleHAiOjE3MzA4MTgzMjF9.OJ2KTjCBnA1K5A8rRjyEVlllb1lh19PXZGKl9648HJI
 
 {
     "name": "Updated Product",

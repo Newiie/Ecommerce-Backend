@@ -31,12 +31,14 @@ declare module 'express-serve-static-core' {
 // MIDDLEWARE FUNCTIONS
 const jwtAuth = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
+    console.log("TOKEN: ", token);
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
     }
     
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as IJwtToken;
+        console.log("DECODED: ", decoded);
         if (decoded.role === "user") {  
             const user = await UserRepository.findById(decoded.id);
             if (!user) {
@@ -72,13 +74,26 @@ const get_access_token = async () => {
         })
 }
 
-const errorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
+const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof AppError) {
         return res.status(err.status).json({
             message: err.message,
             error: {
                 status: err.status,
                 isOperational: err.isOperational,
+            }
+        });
+    }
+
+    console.log("ERROR HANDLER: ", err);
+
+    if (err instanceof jwt.TokenExpiredError) {
+        console.log("TOKEN EXPIRED");
+        return res.status(401).json({
+            message: 'Token expired',
+            error: {
+                status: 401,
+                isOperational: false,
             }
         });
     }
@@ -103,7 +118,7 @@ const requestLogger = (request: Request, response : Response, next: NextFunction
 };
 
 const unknownEndpoint = (request: Request, response: Response) => {
-response.status(404).send({ error: 'unknown endpoint' });
+    response.status(404).send({ error: 'unknown endpoint' });
 };
 
 const resetAllData = async () => {

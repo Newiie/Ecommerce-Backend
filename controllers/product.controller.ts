@@ -4,6 +4,7 @@ import ProductService from '../services/product.service';
 import logger from '../utils/logger';
 import AppError from '../utils/AppError';
 
+
 class ProductController {
     private productService: ProductService;
 
@@ -15,6 +16,7 @@ class ProductController {
     public getProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const product = await this.productService.getProductById(req.params.id);
+            console.log("PRODUCT: ", product);
             res.status(200).send(product);
         } catch (error) {
             next(error);
@@ -32,18 +34,33 @@ class ProductController {
 
     public createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+
             if (req.role !== 'admin') {
-                throw new Error('Unauthorized');
+                throw new AppError('Unauthorized', 403);
             }
 
             const productData = req.body;
+
             if (!productData.name) {
                 res.status(400).send({ message: 'Product name is required' });
                 return;
             }
-            if (req.file) {
-                productData.productImage = req.file.buffer; 
+
+            const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+            if (files && files['productImage']) {
+                productData.productImage = files['productImage'][0].buffer;
             }
+
+            if (files['variationImages']) {
+                files['variationImages'].forEach((file, index) => {
+                    if (productData.variations[index]) {
+                        productData.variations[index].productImage = file.buffer;
+                    }
+                });
+            }
+
+
             const product = await this.productService.createProduct(productData);
             res.status(201).send(product);
         } catch (error) {

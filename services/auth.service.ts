@@ -37,7 +37,8 @@ class AuthService {
     
       return { 
         id: user._id.toString(),
-        token
+        token,
+        role: user.role
       };
   }
 }

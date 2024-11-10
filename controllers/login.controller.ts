@@ -19,9 +19,11 @@ class LoginController {
                 logger.error(result.error)
                 return res.status(401).json({ error: result.error });
             }
-    
+                
             res.status(200).send({
-                token: result.token
+                token: result.token,
+                userId: result.id,
+                role: result.role
             });
         } catch (error) {
             logger.error(error)

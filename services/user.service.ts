@@ -22,6 +22,10 @@ class UserService {
         return await this.userRepository.createUser(userData);
     }
 
+    public async getUser(userId: string): Promise<IUser | null> {
+        return await this.userRepository.findById(userId);
+    }
+
     // TEST FUNCTION
     public async getAllUsers(): Promise<IUser[] | null> {
         return await this.userRepository.findAllUsers();

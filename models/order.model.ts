@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema({
     totalAmount: { type: Number, required: true },
     orderStatus: { type: String, required: true, enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'], default: 'Pending' },
     orderedAt: { type: Date, default: Date.now },
+    orderId: { type: String, required: true },
   });
   
   orderSchema.set('toJSON', {

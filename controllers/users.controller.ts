@@ -29,12 +29,24 @@ class UserController {
         }
     };
 
+    
+
     public getAllUsers = async (req: Request, res: Response) => {
         try {
             const users = await this.userService.getAllUsers();
             res.status(200).json(users);
         } catch (error) {
             console.error('Error fetching users:', error);
+            res.status(500).json({ error: 'Something went wrong' });
+        }
+    };
+
+    public getUser = async (req: Request, res: Response) => {
+        try {
+            const user = await this.userService.getUser(req.id as string);
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error fetching user:', error);
             res.status(500).json({ error: 'Something went wrong' });
         }
     };

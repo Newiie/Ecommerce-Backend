@@ -143,6 +143,7 @@ class PaypalService {
         const orderData = {
           user: user._id,
           products: user.cart,
+          orderId: orderID,
           totalAmount: totalAmount,
           orderStatus: "Pending"
         }

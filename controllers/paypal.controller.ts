@@ -19,7 +19,6 @@ class PaypalController {
         try {
             const { currency } = req.body;
             const order = await this.paypalService.createOrder(req.id as string, currency);
-            console.log("ORDER: ", order);
             res.status(200).json(order);
         } catch (error) {
             next(error);

@@ -27,7 +27,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MmExZmE1O
 }
 
 ### Get Product by ID
-GET http://localhost:3001/api/products/66ec0babc9db96a273e5da39
+GET http://localhost:3001/api/products/672f0bde403cd46181ff511e
 Content-Type: application/json
 
 ### Get All Products

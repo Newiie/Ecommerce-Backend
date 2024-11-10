@@ -18,7 +18,7 @@ interface IProductVariation {
     variationName: string;  
     size?: string;          
     color?: string;         
-    price: number;          
+    basePrice: number;          
     discountRate?: number;  
     productImage?: Buffer;         
     stock: number;          

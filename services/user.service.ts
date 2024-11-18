@@ -33,19 +33,18 @@ class UserService {
 
     public async addToCart(userId: string, productId: string, quantity: number): Promise<IUser | null> {
         const product = await this.productRepository.findById(productId)
-        // const productVariation = product?.variations.find((variation: IProductVariation) => variation.variationId.toString() === productId);
 
-        // if(!productVariation) {
-        //     throw new AppError("Product variation not found", 404);
-        // }
+        const productVariation = await this.productRepository.findVariationById(productId);
 
-        // if (!productVariation.stock) {
-        //     throw new AppError("Product out of stock", 404);
-        // }
-
-        if (!product) {
+        console.log("PRODUCT VARIATION: ", productVariation)
+        if(!productVariation && !product) {
             throw new AppError("Product not found", 404);
         }
+
+        // if (productVariation && productVariation.stock < quantity) {
+        //     throw new AppError("Insufficient stock for the selected variation", 404);
+        // }
+    
         await this.userRepository.addOrUpdateCart(userId, productId, quantity);
         return await this.userRepository.findById(userId); 
     }
@@ -61,7 +60,6 @@ class UserService {
 
     public async clearCart(userId: string): Promise<IUser | null> {
         await this.userRepository.clearCart(userId);
-        console.log("CLEAR CART ", await this.userRepository.findById(userId))
         return await this.userRepository.findById(userId);  
     }
 
@@ -75,19 +73,20 @@ class UserService {
         if (!cartData) {
             throw new AppError("CartData not found", 404);
         }
-        console.log("CART DATA ", cartData)
+
+        // console.log("CART DATA ", cartData)
         const cartItems: ICartItem[] = cartData.map((item: any) => {
-            const product = item.product;
+            const product = item;
+            // console.log("PRODUCT ", product)
             return {
-                id: item._id,
-                productId: product._id,
-                name: product.name,
+                productId: product._id.toString(),
+                name: product?.name || product?.variationName,
                 quantity: item.quantity,
-                price: product.basePrice,
-                productImage: product.productImage,
+                price: product?.basePrice,
+                productImage: product?.productImage,
             };
         });
-        console.log("CART ITEMS ", cartItems)
+        // console.log("CART ITEMS ", cartItems)
         return cartItems;
     }
 }

@@ -8,11 +8,11 @@ usersRouter.post('/', UserController.createUser);
 usersRouter.get('/', UserController.getAllUsers);
 
 usersRouter.put('/:id', middleware.jwtAuth, UserController.updateUser); 
-usersRouter.get('/profile', middleware.jwtAuth, UserController.getUser);
-usersRouter.delete('/:id', middleware.jwtAuth, UserController.deleteUser); 
-usersRouter.post('/cart/add', middleware.jwtAuth, UserController.addToCart); 
-usersRouter.post('/cart/remove', middleware.jwtAuth, UserController.removeFromCart);  
-usersRouter.get('/cart/', middleware.jwtAuth, UserController.getCart);
-usersRouter.post('/cart/clear', middleware.jwtAuth, UserController.clearCart);         
+usersRouter.get('/profile', middleware.jwtAuth(['user', 'admin']), UserController.getUser);
+usersRouter.delete('/:id', middleware.jwtAuth(['admin']), UserController.deleteUser); 
+usersRouter.post('/cart/add', middleware.jwtAuth(['user', 'admin']), UserController.addToCart); 
+usersRouter.post('/cart/remove', middleware.jwtAuth(['user', 'admin']), UserController.removeFromCart);  
+usersRouter.get('/cart/', middleware.jwtAuth(['user', 'admin']), UserController.getCart);
+usersRouter.post('/cart/clear', middleware.jwtAuth(['user', 'admin']), UserController.clearCart);         
 
 export default usersRouter;

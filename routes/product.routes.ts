@@ -11,8 +11,8 @@ const upload = multer({ storage: multer.memoryStorage() }).fields([
 
 router.get('/:id', ProductController.getProduct);
 router.get('/', ProductController.getAllProduct);
-router.post('/', middleware.jwtAuth, upload, ProductController.createProduct);
-router.put('/:id', middleware.jwtAuth, upload, ProductController.updateProduct);
-router.delete('/:id', middleware.jwtAuth, ProductController.deleteProduct);
+router.post('/', middleware.jwtAuth(['admin']), upload, ProductController.createProduct);
+router.put('/:id', middleware.jwtAuth(['admin']), upload, ProductController.updateProduct);
+router.delete('/:id', middleware.jwtAuth(['admin']), ProductController.deleteProduct);
 
 export default router;

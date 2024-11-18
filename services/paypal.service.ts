@@ -7,6 +7,7 @@ import { IOrderRepository } from '../repositories/Order/order.repository';
 import { IProductRepository } from '../repositories/Product/product.repository';
 import middleware from '../utils/middleware';
 import { IProductVariation } from '../utils/types';
+import AppError from '../utils/AppError';
 
 const get_access_token = middleware.get_access_token;
 
@@ -27,39 +28,47 @@ class PaypalService {
     try {
       const accessToken = await get_access_token();
   
-      const user = await User.findById(userId).populate('cart.product');
+      const user = await User.findById(userId);
       if (!user) {
         throw new Error('User not found');
       }
 
-      console.log("USER CART: ", user.cart);
-  
-     
-      const totalAmount = user.cart.reduce((acc, item : any) => {
-        const product = item.product as any; 
-        let finalPrice = product.basePrice; 
+      const cartData = await this.userRepository.getCart(userId);
+      if (!cartData) {
+          throw new AppError("CartData not found", 404);
+      }
+      // console.log("USER CART: ", user.cart);
+      
+      let totalAmount = 0;
+      for (const item of cartData) {
+        totalAmount += item.basePrice * item.quantity;
+      }
 
-        // const variation = product.variations.find(
-        //   (variation: IProductVariation) => variation.variationId.toString() === item.variationId?.toString()
-        // );
+
+      //   const product = item.product as any; 
+      //   let finalPrice = product.basePrice; 
+
+      //   // const variation = product.variations.find(
+      //   //   (variation: IProductVariation) => variation.variationId.toString() === item.variationId?.toString()
+      //   // );
   
-        // if (variation) {
+      //   // if (variation) {
         
-        //   finalPrice = variation.price;
-        //   if (variation.discountRate) {
-        //     finalPrice = finalPrice * (1 - variation.discountRate / 100);
-        //   }
-        // } else 
-        if (product.discountRate) {
-          // If no specific variation and product-level discount exists, apply it
-          finalPrice = finalPrice * (1 - product.discountRate / 100);
-        }
+      //   //   finalPrice = variation.price;
+      //   //   if (variation.discountRate) {
+      //   //     finalPrice = finalPrice * (1 - variation.discountRate / 100);
+      //   //   }
+      //   // } else 
+      //   if (product.discountRate) {
+      //     // If no specific variation and product-level discount exists, apply it
+      //     finalPrice = finalPrice * (1 - product.discountRate / 100);
+      //   }
   
-        // Calculate item total and add to the running total amount
-        return acc + finalPrice * item.quantity;
-      }, 0);
+      //   // Calculate item total and add to the running total amount
+      //   return acc + finalPrice * item.quantity;
+      // }, 0);
   
-      console.log("TOTAL AMOUNT: ", totalAmount);
+      // console.log("TOTAL AMOUNT: ", totalAmount);
   
       // Prepare order data for PayPal with securely calculated total amount
       const order_data_json = {
@@ -82,7 +91,8 @@ class PaypalService {
         },
         body: JSON.stringify(order_data_json)
       });
-  
+      
+
       if (!response.ok) {
         const errorResponse = await response.json();
         console.error('Error from PayPal:', errorResponse);
@@ -120,43 +130,60 @@ class PaypalService {
             }
         });
 
+        const json = await response.json();  // Store the JSON response here
+        console.log("RESPONSE CAPTURE ORDER: ", json);
 
         if (!response.ok) {
-            const errorResponse = await response.json();
-            console.error('Error from PayPal:', errorResponse);
-            throw new Error(`PayPal order capture failed: ${errorResponse.message}`);
+            console.error('Error from PayPal:', json);
+            throw new Error(`PayPal order capture failed: ${json.message}`);
         }
 
-        const user = await User.findById(userId).populate('cart.product');
+        console.log("USER ID: ", userId);
+        console.log("ORDER ID: ", orderID);
+
+        const user = await User.findById(userId).populate('cart');
 
         if (!user) {
-            throw new Error('User not found');
+            throw new AppError('User not found', 404);
         }
 
-        const totalAmount = user.cart.reduce((acc, item : any) => {
-          const product = item.product as any; 
-          return acc + product.basePrice * item.quantity;
-        }, 0);
+        const cartData = await this.userRepository.getCart(userId);
 
-        console.log("user: ", user);   
+        if (!cartData) {
+            throw new AppError("CartData not found", 404);
+        }
+
+        let totalAmount = 0;
+
+        for (const item of cartData) {
+          totalAmount += item.basePrice * item.quantity;
+        }
+
+        // console.log("user: ", user);   
+
+        // console.log("CART DATA: ", cartData);
 
         const orderData = {
           user: user._id,
-          products: user.cart,
+          products: cartData.map((item: any) => ({
+            product: item._id.toString(),
+            quantity: item.quantity
+          })),
           orderId: orderID,
           totalAmount: totalAmount,
           orderStatus: "Pending"
         }
 
+        // console.log("ORDER DATA: ", orderData);
         const order = await this.orderRepository.createOrder(orderData);
 
+        // console.log("ORDER: ", order);  
         user.cart = [];
         user.orders.push(order._id);
         await order.save();
         await user.save();
 
-        const json = await response.json();
-        return {status: json.status, statusCode: response.status}; 
+        return {statusCode: response.status}; 
 
     } catch (err) {
         console.error('Error capturing PayPal order:', err);

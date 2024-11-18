@@ -1,10 +1,22 @@
 import { IProductRepository } from './product.repository';
 import Product, { IProduct } from '../../models/product.model';
+import { IProductVariation } from '../../utils/types';
 
 export class MongoDbProductRepository implements IProductRepository {
-    public async findById(id: string): Promise<IProduct | null> { 
-        return await Product.findById(id);
+
+    public async findById(id: string): Promise<any> { 
+        return await Product.findById(id).lean().exec();
     }
+
+    public async findVariationById(variationId: string): Promise<any> {
+        const product = await Product.findOne(
+            { "variations._id": variationId },
+            { "variations.$": 1 } 
+        ).lean().exec();
+    
+        return product ? product.variations[0] : null;
+    }
+    
 
     public async getAllProduct() : Promise<IProduct[] | void> {
         return await Product.find({});

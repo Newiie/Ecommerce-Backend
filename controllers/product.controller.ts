@@ -16,7 +16,6 @@ class ProductController {
     public getProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const product = await this.productService.getProductById(req.params.id);
-            console.log("PRODUCT: ", product);
             res.status(200).send(product);
         } catch (error) {
             next(error);
@@ -40,7 +39,7 @@ class ProductController {
             }
 
             const productData = req.body;
-
+            
             if (!productData.name) {
                 res.status(400).send({ message: 'Product name is required' });
                 return;

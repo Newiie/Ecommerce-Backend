@@ -15,10 +15,10 @@ class LoginController {
     
             const result = await this.authService.authenticateUser(username, password);
             logger.info(result)
-            if (result.error) {
-                logger.error(result.error)
-                return res.status(401).json({ error: result.error });
-            }
+            // if (result.error) {
+            //     logger.error(result.error)
+            //     return res.status(401).json({ error: result.error });
+            // }
                 
             res.status(200).send({
                 token: result.token,

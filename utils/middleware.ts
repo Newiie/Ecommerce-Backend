@@ -29,7 +29,7 @@ declare module 'express-serve-static-core' {
 }
 
 // MIDDLEWARE FUNCTIONS
-const jwtAuth = async (req: Request, res: Response, next: NextFunction) => {
+const jwtAuth = (allowedRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
     console.log("TOKEN: ", token);
     if (!token) {
@@ -38,19 +38,22 @@ const jwtAuth = async (req: Request, res: Response, next: NextFunction) => {
     
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as IJwtToken;
+        
         console.log("DECODED: ", decoded);
-        if (decoded.role === "user") {  
-            const user = await UserRepository.findById(decoded.id);
-            if (!user) {
-                return res.status(401).json({ message: 'Invalid token' });
-            }
+        console.log("ALLOWED ROLES: ", allowedRoles);
+        if (!allowedRoles.includes(decoded.role)) {
+            return res.status(403).json({ message: 'Forbidden: You do not have access to this resource' });
+        }
+
+        const user = await UserRepository.findById(decoded.id);
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid token' });
         }
 
         req.id = decoded.id;
         req.role = decoded.role;
         next();
     } catch (error) {
-        console.log("ERROR: ", error);
         next(error);
     }
 }

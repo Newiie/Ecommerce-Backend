@@ -22,12 +22,8 @@ class ProductService {
     public async getAllProduct() {
         try {
             const products = await this.productRepository.getAllProduct();
-            const productsWithoutImages = products.map((product: any) => {
-                const { productImage, ...rest } = product;
-                return rest;
-            });
-            console.log("PRODUCTS WITHOUT IMAGES: ", productsWithoutImages);
-            return productsWithoutImages;
+           
+            return products;
         } catch (error) {
             throw error;
         }

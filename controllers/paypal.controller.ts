@@ -29,6 +29,7 @@ class PaypalController {
         try {
             const { orderID } = req.body;
             const order = await this.paypalService.captureOrder(orderID, req.id as string);
+            console.log("ORDER CAPTURE: ", order);
             res.status(200).json(order);
         } catch (error) {
             next(error);

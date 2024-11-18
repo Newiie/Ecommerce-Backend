@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import mongoDbUserRepository from '../repositories/User/mongodb.user.repository';
 import { IUserRepository } from '../repositories/User/user.repository.interface';
 import { AuthResult } from '../utils/types';
+import AppError from '../utils/AppError';
 
 class AuthService {
   private userRepository: IUserRepository;
@@ -13,7 +14,7 @@ class AuthService {
   public async authenticateUser(username: string, password: string) : Promise<AuthResult> {
       const user = await this.userRepository.findByUsername(username);
       if (!user) {
-        return { error: 'Invalid username or password' };
+        throw new AppError('User does not exist', 401);
       }
     
       const passwordCorrect = user.passwordHash
@@ -21,7 +22,7 @@ class AuthService {
         : false;
     
       if (!passwordCorrect) {
-        return { error: 'Invalid username or password' };
+        throw new AppError('Invalid username or password', 401);
       }
     
       const userForToken = {

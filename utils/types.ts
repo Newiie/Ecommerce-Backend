@@ -7,9 +7,10 @@ interface IJwtToken extends Request {
 }
 
 interface AuthResult {
-    id?: string;
+    id: string;
     error?: string;
-    token?: string;
+    accessToken: string;
+    refreshToken?: string;
     role?: string;
 }
 

@@ -3,12 +3,14 @@ import express from "express"
 import cors from "cors"
 import mongoose from "mongoose"
 import middleware from "./utils/middleware"
+import cookieParser from "cookie-parser"
+
 require('express-async-errors')
 const app = express()
 
 // ROUTER REFERENCE
 import usersRouter from "./routes/user.routes"
-import loginRouter from "./routes/login.route"
+import authRouter from "./routes/auth.route"
 import productRouter from "./routes/product.routes"
 import orderRouter from "./routes/order.route"
 import reviewRouter from "./routes/review.route"
@@ -30,6 +32,7 @@ mongoose.connect(config.MONGODB_URI)
 
 // MIDDLEWARES
 const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000'];
+app.use(cookieParser());
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -38,8 +41,10 @@ app.use(cors({
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  }
+  },
+  credentials: true 
 }));
+
 
 app.use(express.static('dist'))
 app.use(express.json())
@@ -49,7 +54,7 @@ app.use(middleware.requestLogger)
 
 // ROUTER
 app.use('/api/users', usersRouter)
-app.use('/api/login', loginRouter)
+app.use('/api/auth', authRouter)
 app.use('/api/products', productRouter)
 app.use('/api/orders', orderRouter)
 app.use('/api/reviews', reviewRouter)

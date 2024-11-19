@@ -12,7 +12,6 @@ class ReviewController {
 
   public  createReview = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log('Creating review with data:', req.body);
       const review = await this.reviewService.createReview(req.body);
       res.status(201).json(review);
     } catch (error) {

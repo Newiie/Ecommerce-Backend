@@ -30,12 +30,15 @@ declare module 'express-serve-static-core' {
 
 // MIDDLEWARE FUNCTIONS
 const jwtAuth = (allowedRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Authorization Header: ", req.headers.authorization);
     const token = req.headers.authorization?.split(' ')[1];
     console.log("TOKEN: ", token);
-    if (!token) {
+    if (!token || token === "null" || token === undefined || token === '') {
+        console.log("NO TOKEN");
         return res.status(401).json({ message: 'No token provided' });
     }
-    
+
+    console.log("IT WENT THROUGH?");
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as IJwtToken;
         

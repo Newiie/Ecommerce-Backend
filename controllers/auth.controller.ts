@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import AuthService from '../services/auth.service';
 import logger from '../utils/logger';
 import jwt from 'jsonwebtoken';
-import { access } from 'fs';
+
 
 class AuthController {
 

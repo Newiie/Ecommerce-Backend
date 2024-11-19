@@ -20,7 +20,10 @@ class AuthService {
       return !!storedToken;
   };
 
-  public hashToken = (token: string) => token;
+  public hashToken = (token: string) => {
+    const secret = process.env.HASHED_TOKEN as string;
+    return bcrypt.hashSync(token, secret);
+  };
 
   public saveRefreshToken = async (userId: string, token: string) => {
     const hashedToken = this.hashToken(token);
@@ -36,7 +39,7 @@ class AuthService {
   public generateAccessToken(userId: string, role: string): string {
     const payload = { id: userId, role: role };
     const secret = process.env.JWT_SECRET as string;
-    const options = { expiresIn: '15m' }; // Short lifespan for access tokens
+    const options = { expiresIn: '15m' }; 
     return jwt.sign(payload, secret, options);
   }
 

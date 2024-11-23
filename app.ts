@@ -31,7 +31,7 @@ mongoose.connect(config.MONGODB_URI)
   })
 
 // MIDDLEWARES
-const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000'];
+const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000', 'https://supreme-team-demo.netlify.app/'];
 app.use(cookieParser());
 
 app.use(cors({

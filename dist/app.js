@@ -29,10 +29,11 @@ mongoose_1.default.connect(config_1.default.MONGODB_URI)
     logger_1.default.error('error connection to MongoDB:', error.message);
 });
 // MIDDLEWARES
-const allowedOrigins = [config_1.default.FRONTEND_URL, 'http://localhost:3000'];
+const allowedOrigins = [config_1.default.FRONTEND_URL, 'http://localhost:3000', 'https://supreme-team-demo.netlify.app/'];
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
+        console.log("ORIGIN: ", origin);
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         }

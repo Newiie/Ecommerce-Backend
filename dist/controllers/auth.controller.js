@@ -16,6 +16,7 @@ class AuthController {
             if (req.cookies === undefined)
                 return res.status(401).json({ message: 'No cookies provided' });
             const refreshToken = req.cookies.refreshToken;
+            console.log("Cookies ", req.cookies);
             if (refreshToken === undefined)
                 return res.status(401).json({ message: 'Refresh token not provided' });
             const isValid = await this.authService.isRefreshTokenValid(refreshToken);

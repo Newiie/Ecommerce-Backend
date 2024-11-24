@@ -36,7 +36,16 @@ const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000', 'https://s
 app.use(cookieParser());
 
 app.use(cors({
-  origin: 'https://supreme-team-demo.netlify.app', // e.g., "https://your-frontend.com"
+  origin: (origin, callback) => {
+    console.log("ORIGIN: ", origin);
+    console.log("ALLOWED ORIGINS: ", allowedOrigins);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    }
+    else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true, // Allow cookies
 }));
 

@@ -13,7 +13,6 @@ class AuthService {
     this.userRepository = new mongoDbUserRepository;
   }
 
-
   public isRefreshTokenValid = async (token: string): Promise<boolean> => {
       const hashedToken = this.hashToken(token);
       const storedToken = await RefreshToken.findOne({ token: hashedToken });

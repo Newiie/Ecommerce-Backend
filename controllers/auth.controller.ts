@@ -51,6 +51,8 @@ class AuthController {
 
             const { accessToken, refreshToken, id, role } = result;
 
+            console.log('Login successful');
+            console.log("Refresh Token: ", refreshToken);
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: true,

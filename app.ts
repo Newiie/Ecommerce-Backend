@@ -31,21 +31,15 @@ mongoose.connect(config.MONGODB_URI)
   })
 
 // MIDDLEWARES
-const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000', 'https://supreme-team-demo.netlify.app/'];
+const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000', 'https://supreme-team-demo.netlify.app'];
 
 app.use(cookieParser());
 
 app.use(cors({
-  origin: (origin, callback) => {
-    console.log("ORIGIN: ", origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true 
+  origin: 'https://supreme-team-demo.netlify.app', // e.g., "https://your-frontend.com"
+  credentials: true, // Allow cookies
 }));
+
 
 
 app.use(express.static('dist'))

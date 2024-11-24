@@ -39,6 +39,12 @@ app.use(cors({
   origin: true, 
   credentials: true, 
 }));
+
+app.use((req, res, next) => {
+  console.log('Request Cookies:', req.cookies);
+  console.log('Response Headers:', res.getHeaders());
+  next();
+});
 // app.use(cors({
 //   origin: (origin, callback) => {
 //     console.log("ORIGIN: ", origin);

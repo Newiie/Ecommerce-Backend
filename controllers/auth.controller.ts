@@ -53,6 +53,7 @@ class AuthController {
 
             console.log('Login successful');
             console.log("Refresh Token: ", refreshToken);
+            
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: true,

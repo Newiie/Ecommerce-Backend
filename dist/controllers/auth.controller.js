@@ -29,7 +29,7 @@ class AuthController {
             await this.authService.saveRefreshToken(decoded.id, newRefreshToken);
             res.cookie('refreshToken', newRefreshToken, {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === 'production', 
+                secure: true,
                 sameSite: 'none'
             });
             return res.status(200).json({ accessToken: newAccessToken });
@@ -47,9 +47,11 @@ class AuthController {
                 return res.status(401).json({ error: result.error });
             }
             const { accessToken, refreshToken, id, role } = result;
+            console.log('Login successful');
+            console.log("Refresh Token: ", refreshToken);
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                // secure: process.env.NODE_ENV === 'production',
+                secure: true,
                 sameSite: 'none',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             });
@@ -75,8 +77,8 @@ class AuthController {
             // Clear the refresh token cookie
             res.clearCookie('refreshToken', {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                secure: true,
+                sameSite: 'none',
             });
             return res.status(200).json({ message: 'Logged out successfully' });
         }

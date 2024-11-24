@@ -29,20 +29,25 @@ mongoose_1.default.connect(config_1.default.MONGODB_URI)
     logger_1.default.error('error connection to MongoDB:', error.message);
 });
 // MIDDLEWARES
-const allowedOrigins = [config_1.default.FRONTEND_URL, 'http://localhost:3000', 'https://supreme-team-demo.netlify.app/'];
+const allowedOrigins = [config_1.default.FRONTEND_URL, 'http://localhost:3000', 'https://supreme-team-demo.netlify.app'];
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: (origin, callback) => {
-        console.log("ORIGIN: ", origin);
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
+    origin: true,
+    credentials: true,
 }));
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     console.log("ORIGIN: ", origin);
+//     console.log("ALLOWED ORIGINS: ", allowedOrigins);
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     }
+//     else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true, // Allow cookies
+// }));
 app.use(express_1.default.static('dist'));
 app.use(express_1.default.json());
 app.use(middleware_1.default.requestLogger);

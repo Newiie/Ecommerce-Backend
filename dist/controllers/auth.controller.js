@@ -27,7 +27,11 @@ class AuthController {
             const newAccessToken = this.authService.generateAccessToken(decoded.id, decoded.role);
             const newRefreshToken = this.authService.generateRefreshToken(decoded.id, decoded.role);
             await this.authService.saveRefreshToken(decoded.id, newRefreshToken);
-            res.cookie('refreshToken', newRefreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
+            res.cookie('refreshToken', newRefreshToken, {
+                httpOnly: true,
+                // secure: process.env.NODE_ENV === 'production', 
+                sameSite: 'none'
+            });
             return res.status(200).json({ accessToken: newAccessToken });
         }
         catch (error) {
@@ -45,8 +49,8 @@ class AuthController {
             const { accessToken, refreshToken, id, role } = result;
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                // secure: process.env.NODE_ENV === 'production',
+                sameSite: 'none',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             });
             return res.status(200).json({ token: accessToken, userId: id, role });

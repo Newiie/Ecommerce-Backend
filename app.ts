@@ -35,9 +35,23 @@ const allowedOrigins = [config.FRONTEND_URL, 'http://localhost:3000', 'https://s
 
 app.use(cookieParser());
 
-app.use(cors({}))
-
-
+app.use(cors({
+  origin: true, 
+  credentials: true, 
+}));
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     console.log("ORIGIN: ", origin);
+//     console.log("ALLOWED ORIGINS: ", allowedOrigins);
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     }
+//     else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true, // Allow cookies
+// }));
 
 app.use(express.static('dist'))
 app.use(express.json())

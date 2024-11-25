@@ -67,7 +67,6 @@ class AuthController {
             if (!refreshToken) {
                 return res.status(200).json({ message: 'User already logged out' });
             }
-            // Optional: Revoke the refresh token
             try {
                 await this.authService.revokeRefreshToken(refreshToken);
             }

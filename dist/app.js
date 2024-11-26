@@ -56,7 +56,6 @@ app.use((req, res, next) => {
 app.use(express_1.default.static('dist'));
 app.use(express_1.default.json());
 app.use(middleware_1.default.requestLogger);
-middleware_1.default.resetAllData();
 // ROUTER
 app.use('/api/users', user_routes_1.default);
 app.use('/api/auth', auth_route_1.default);

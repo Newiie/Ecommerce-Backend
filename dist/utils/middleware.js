@@ -14,6 +14,7 @@ const user_model_1 = __importDefault(require("../models/user.model"));
 const order_model_1 = __importDefault(require("../models/order.model"));
 const review_model_1 = __importDefault(require("../models/review.model"));
 const product_model_1 = __importDefault(require("../models/product.model"));
+const auth_model_1 = require("../models/auth.model");
 // ENVIRONMENT VARIABLES
 const client_id = process.env.PAYPAL_CLIENT_ID;
 const client_secret = process.env.PAYPAL_CLIENT_SECRET;
@@ -112,6 +113,7 @@ const resetAllData = async () => {
         await product_model_1.default.deleteMany({});
         await order_model_1.default.deleteMany({});
         await review_model_1.default.deleteMany({});
+        await auth_model_1.RefreshToken.deleteMany({});
         logger_1.default.info('All data has been reset.');
     }
     catch (error) {

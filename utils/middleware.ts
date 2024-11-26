@@ -14,6 +14,7 @@ import Order from "../models/order.model";
 import Review from "../models/review.model";
 import Product from "../models/product.model";
 import { IJwtToken } from './types';
+import { RefreshToken } from '../models/auth.model';
 
 // ENVIRONMENT VARIABLES
 const client_id = process.env.PAYPAL_CLIENT_ID;
@@ -133,6 +134,7 @@ const resetAllData = async () => {
         await Product.deleteMany({});
         await Order.deleteMany({});
         await Review.deleteMany({});
+        await RefreshToken.deleteMany({});
         logger.info('All data has been reset.');
     } catch (error: any) {
         logger.error('Error resetting data:', error.message);

@@ -26,7 +26,6 @@ class UserService {
         return await this.userRepository.findById(userId);
     }
 
-    // TEST FUNCTION
     public async getAllUsers(): Promise<IUser[] | null> {
         return await this.userRepository.findAllUsers();
     }
@@ -40,10 +39,6 @@ class UserService {
         if(!productVariation && !product) {
             throw new AppError("Product not found", 404);
         }
-
-        // if (productVariation && productVariation.stock < quantity) {
-        //     throw new AppError("Insufficient stock for the selected variation", 404);
-        // }
     
         await this.userRepository.addOrUpdateCart(userId, productId, quantity);
         return await this.userRepository.findById(userId); 
@@ -74,10 +69,9 @@ class UserService {
             throw new AppError("CartData not found", 404);
         }
 
-        // console.log("CART DATA ", cartData)
         const cartItems: ICartItem[] = cartData.map((item: any) => {
             const product = item;
-            // console.log("PRODUCT ", product)
+       
             return {
                 productId: product._id.toString(),
                 name: product?.name || product?.variationName,
@@ -86,7 +80,7 @@ class UserService {
                 productImage: product?.productImage,
             };
         });
-        // console.log("CART ITEMS ", cartItems)
+    
         return cartItems;
     }
 }

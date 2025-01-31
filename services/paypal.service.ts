@@ -44,40 +44,13 @@ class PaypalService {
         totalAmount += item.basePrice * item.quantity;
       }
 
-
-      //   const product = item.product as any; 
-      //   let finalPrice = product.basePrice; 
-
-      //   // const variation = product.variations.find(
-      //   //   (variation: IProductVariation) => variation.variationId.toString() === item.variationId?.toString()
-      //   // );
-  
-      //   // if (variation) {
-        
-      //   //   finalPrice = variation.price;
-      //   //   if (variation.discountRate) {
-      //   //     finalPrice = finalPrice * (1 - variation.discountRate / 100);
-      //   //   }
-      //   // } else 
-      //   if (product.discountRate) {
-      //     // If no specific variation and product-level discount exists, apply it
-      //     finalPrice = finalPrice * (1 - product.discountRate / 100);
-      //   }
-  
-      //   // Calculate item total and add to the running total amount
-      //   return acc + finalPrice * item.quantity;
-      // }, 0);
-  
-      // console.log("TOTAL AMOUNT: ", totalAmount);
-  
       // Prepare order data for PayPal with securely calculated total amount
       const order_data_json = {
         intent: 'CAPTURE',
         purchase_units: [{
           amount: {
             currency_code: currency,
-            // value: "1.00",
-            value: totalAmount.toFixed(2)  // Format total for PayPal
+            value: totalAmount.toFixed(2)  
           }
         }]
       };
@@ -105,10 +78,6 @@ class PaypalService {
       const approvalUrl = json.links.find((link: any) => link.rel === 'approve').href;
       console.log("APPROVAL URL: ", approvalUrl, "\nORDER ID: ", json.id);
   
-      // // Clear the user's cart on successful order creation
-      // user.cart = [];
-      // await user.save();
-  
       return { approvalUrl, orderId: json.id };
   
     } catch (err) {
@@ -130,7 +99,7 @@ class PaypalService {
             }
         });
 
-        const json = await response.json();  // Store the JSON response here
+        const json = await response.json();  
         console.log("RESPONSE CAPTURE ORDER: ", json);
 
         if (!response.ok) {
@@ -159,10 +128,6 @@ class PaypalService {
           totalAmount += item.basePrice * item.quantity;
         }
 
-        // console.log("user: ", user);   
-
-        // console.log("CART DATA: ", cartData);
-
         const orderData = {
           user: user._id,
           products: cartData.map((item: any) => ({
@@ -174,12 +139,11 @@ class PaypalService {
           orderStatus: "Pending"
         }
 
-        // console.log("ORDER DATA: ", orderData);
         const order = await this.orderRepository.createOrder(orderData);
 
-        // console.log("ORDER: ", order);  
         user.cart = [];
         user.orders.push(order._id);
+        
         await order.save();
         await user.save();
 
